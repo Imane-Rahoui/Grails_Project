@@ -28,12 +28,35 @@
             </g:hasErrors>
             <g:form resource="${this.user}" method="PUT">
                 <g:hiddenField name="version" value="${this.user?.version}" />
-                <fieldset class="form">
-                    <f:all bean="user"/>
-                </fieldset>
-                <fieldset class="buttons">
-                    <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-                </fieldset>
+                <form action="/user/save" method="post">
+                    <fieldset class="form">
+
+                        <div class='fieldcontain required'>
+                            <label for='username'>Username
+                                <span class='required-indicator'>*</span>
+                            </label><input type="text" name="username" value='${user.username}' required="" id="username"/>
+                        </div>
+                        <div class='fieldcontain required'>
+                            <label for='password'>Password
+                                <span class='required-indicator'>*</span>
+                            </label><input type="password" name="password" required="" value="" id="password"/>
+                        </div>
+                        <div class='fieldcontain required'>
+                            <label for='role'>Role
+                                <span class='required-indicator'>*</span>
+                            </label>
+                            <g:select id="type" name='roleList'
+                                      from='${roleList}'
+                                      optionKey="id" optionValue="authority"></g:select>
+                        </div>
+
+                    </fieldset>
+
+                    <fieldset class="buttons">
+                        <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                    </fieldset>
+                </form>
+
             </g:form>
         </div>
     </body>

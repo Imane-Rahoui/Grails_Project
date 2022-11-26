@@ -18,8 +18,8 @@ class BootStrap {
         UserRole.create(userInstance1,role, true);
 
         userInstance1 = new User(username: "moderator",password: "moderator").save()
-        role = new Role(authority: "ROLE_MODERATOR").save()
         UserRole.create(userInstance1, role, true)
+        role = new Role(authority: "ROLE_MODERATOR").save()
         UserRole.create(userInstance1, role, true)
 
         // On boucle sur une liste de 5 prénoms
