@@ -8,6 +8,7 @@ import static org.springframework.http.HttpStatus.*
 class UserController {
 
     UserService userService
+    UserRole userRole
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -64,7 +65,8 @@ class UserController {
     }
 
     def edit(Long id) {
-        respond userService.get(id)
+        def roleList=Role.list()
+        respond userService.get(id),model:[roleList: roleList]
     }
 
     def update(User user) {
@@ -89,12 +91,19 @@ class UserController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     def delete(Long id) {
+        println("hihi")
         if (id == null) {
             notFound()
             return
         }
 
+        def u=User.findById(id);
+        u.getAuthorities().each {
+            println(it)
+            UserRole.remove(u,it)
+        }
         userService.delete(id)
 
         request.withFormat {

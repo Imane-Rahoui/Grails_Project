@@ -36,15 +36,15 @@
             <tr class="even">
 
                 <td><a href='/user/show/${it.id}'>${it.username}</a></td>
-
-                <g:each in="${it.getAuthorities()}">
-                    <td><a href="/user/show/">${it.authority}</a></td>
-                </g:each>
+                <td>
+                    <g:each in="${it.getAuthorities()}">
+                        <a href="/user/show/">${it.authority}</a>
+                    </g:each>
+                </td>
 
             </tr>
 
         </g:each>
-
         </tbody>
     </table>
 

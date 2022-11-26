@@ -155,7 +155,7 @@ img {
     text-decoration: underline;
 }
 
-.nav a.home, .nav a.list, .nav a.create {
+.nav a.home, .nav a.list, .nav a.delete ,.nav a.create{
     background-position: 0.7em center;
     background-repeat: no-repeat;
     text-indent: 25px;
@@ -169,8 +169,12 @@ img {
     background-image: url(../images/skin/database_table.png);
 }
 
-.nav a.create {
+.nav a.delete,.nav a.create {
     background-image: url(../images/skin/database_add.png);
+}
+
+.nav a.delete{
+    background-image: url(../images/skin/database_delete.png);
 }
 
 .nav li.dropdown.open ul.dropdown-menu {
