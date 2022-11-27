@@ -20,31 +20,74 @@ class IllustrationController {
         respond illustrationService.get(id)
     }
 
+    /*def add(Long id){
+        def annonce=Annonce.get(id);
+        respond new Illustration(params), model:[annonce:annonce]
+    }*/
+
     def create() {
         respond new Illustration(params)
     }
-
-    def save(Illustration illustration) {
-        if (illustration == null) {
+    /*def save(Annonce annonce) {
+        println("ohh")
+        if (annonce == null) {
             notFound()
             return
         }
 
         try {
-            illustrationService.save(illustration)
+
+            println(annonce)
+            def x = request.getFiles('myillustration')
+
+            x.each{
+
+                if (it == null || it.empty){
+                    flash.message = "ops no illustration found !!"
+                    return
+                }else{
+
+                    def pool = ['a'..'z','A'..'Z',0..9,'_'].flatten()
+                    Random rand = new Random(System.currentTimeMillis())
+                    def randomTab = (0..10).collect { pool[rand.nextInt(pool.size())] }
+
+                    def randomString =""
+                    for (item in randomTab) {
+                        randomString = randomString + item
+                    }
+
+                    randomString =  randomString + ".png"
+
+                    def File = new File (grailsApplication.config.illustrations.basePath + randomString)
+
+                    if (File.exists()){
+                        flash.message = "already existing"
+                        return
+                    }else{
+                        it.transferTo(File)
+                        annonce.addToIllustrations(new Illustration(filename: randomString))
+                    }
+                }
+
+
+
+            }
+
+            annonceService.save(annonce)
+
         } catch (ValidationException e) {
-            respond illustration.errors, view:'create'
+            respond annonce.errors, view: 'create'
             return
         }
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'illustration.label', default: 'Illustration'), illustration.id])
-                redirect illustration
+                flash.message = message(code: 'default.created.message', args: [message(code: 'annonce.label', default: 'Annonce'), annonce.id])
+                redirect annonce
             }
-            '*' { respond illustration, [status: CREATED] }
+            '*' { respond annonce, [status: CREATED] }
         }
-    }
+    }*/
 
     def edit(Long id) {
         respond illustrationService.get(id)

@@ -26,11 +26,26 @@
                 </g:eachError>
             </ul>
             </g:hasErrors>
-            <g:form resource="${this.annonce}" method="PUT">
+            <g:form resource="${this.annonce}" method="POST" enctype="multipart/form-data">
                 <g:hiddenField name="version" value="${this.annonce?.version}" />
-                <fieldset class="form">
-                    <f:all bean="annonce"/>
-                </fieldset>
+
+                <f:field bean="annonce" property="title"/>
+                <f:field bean="annonce" property="description"/>
+
+
+                <f:field bean="annonce" property="illustrations">
+                    <div class="property-value" aria-labelledby="illustrations-label">
+
+                        <input multiple="multiple" type="file" name="myillustration" accept="image/png" />
+
+                        <g:each in="${annonce.illustrations}" var="illu">
+                            <g:img  src="${illu.filename}" width="120" height="70"/>
+                        </g:each>
+                    </div>
+                </f:field>
+
+                <br>
+
                 <fieldset class="buttons">
                     <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
                 </fieldset>

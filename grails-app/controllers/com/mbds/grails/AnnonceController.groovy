@@ -10,6 +10,7 @@ class AnnonceController {
 
     AnnonceService annonceService
     SpringSecurityService springSecurityService
+    IllustrationService illustrationService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
@@ -37,19 +38,60 @@ class AnnonceController {
     }
 
     def create() {
-        respond new Annonce(params)
+        def users = User.getAll()
+        //def role=UserRole.findByUser(user)
+        println("ici"+users)
+        respond new Annonce(params),model:[users: users]
     }
 
     def save(Annonce annonce) {
+        println("je suis là")
         if (annonce == null) {
             notFound()
             return
         }
 
         try {
+
+
+            println(annonce)
+            def x = request.getFiles('myillustration')
+
+            x.each{
+
+                if (it == null || it.empty){
+                    flash.message = "ops no illustration found !!"
+                    return
+                }else{
+
+                    def pool = ['a'..'z','A'..'Z',0..9,'_'].flatten()
+                    Random rand = new Random(System.currentTimeMillis())
+                    def randomTab = (0..10).collect { pool[rand.nextInt(pool.size())] }
+
+                    def randomString =""
+                    for (item in randomTab) {
+                        randomString = randomString + item
+                    }
+
+                    randomString =  randomString + ".png"
+
+                    def File = new File (grailsApplication.config.illustrations.basePath + randomString)
+
+                    if (File.exists()){
+                        flash.message = "already existing"
+                        return
+                    }else{
+                        it.transferTo(File)
+                        annonce.addToIllustrations(new Illustration(filename: randomString))
+                    }
+                }
+
+            }
+
             annonceService.save(annonce)
+
         } catch (ValidationException e) {
-            respond annonce.errors, view:'create'
+            respond annonce.errors, view: 'create'
             return
         }
 
@@ -61,11 +103,21 @@ class AnnonceController {
             '*' { respond annonce, [status: CREATED] }
         }
     }
-
     def edit(Long id) {
-        respond annonceService.get(id)
-    }
+        if (id == null) {
+            notFound()
+            return
+        }
 
+        println("hh")
+        def an=annonceService.get(id);
+        println(an)
+
+        respond annonceService.get(id)
+
+        // annonceService.(id)
+
+    }
     def update(Annonce annonce) {
         if (annonce == null) {
             notFound()
@@ -74,8 +126,9 @@ class AnnonceController {
 
         try {
             annonceService.save(annonce)
+
         } catch (ValidationException e) {
-            respond annonce.errors, view:'edit'
+            respond annonce.errors, view: 'edit'
             return
         }
 
@@ -84,10 +137,9 @@ class AnnonceController {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'annonce.label', default: 'Annonce'), annonce.id])
                 redirect annonce
             }
-            '*'{ respond annonce, [status: OK] }
+            '*' { respond annonce, [status: OK] }
         }
     }
-
     def delete(Long id) {
         if (id == null) {
             notFound()
