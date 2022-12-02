@@ -53,7 +53,7 @@
                     </fieldset>
 
                     <fieldset class="buttons">
-                        <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                        <input id="update" class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
                     </fieldset>
                 </form>
 

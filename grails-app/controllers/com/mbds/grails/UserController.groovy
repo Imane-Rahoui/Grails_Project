@@ -76,7 +76,9 @@ class UserController {
         }
 
         try {
+            def role=Role.get(params.roleList)
             userService.save(user)
+            UserRole.create(user,role,true);
         } catch (ValidationException e) {
             respond user.errors, view:'edit'
             return

@@ -109,7 +109,7 @@ class AnnonceController {
             return
         }
 
-        println("hh")
+        //println("hh")
         def an=annonceService.get(id);
         println(an)
 
@@ -125,6 +125,7 @@ class AnnonceController {
         }
 
         try {
+            println(annonce)
             annonceService.save(annonce)
 
         } catch (ValidationException e) {
